@@ -5,7 +5,9 @@
 const CONFIG = {
   // ---- Names and copy ----------------------------------------------
   initials: "YA",
+  eyebrow: "August 2, 2026",
   heroTitle: "Happy Birthday Ya!",
+  heroSub: "Isang gabi lang 'to. Sayangin mo, problema mo.",
   enterButton: "Pindutin mo 'to",
   transitionText: "Tanda mo na hahahahahaha",
 
@@ -21,45 +23,42 @@ Sana ganito pa rin sa susunod na taon: mahaba ang gabi, mura ang alak, at walang
 
 Happy birthday. Tagay.`,
   signedBy: "— Mula sa aming lahat",
+  footer: "Ginawa para sa isang gabi lang",
 
   // ---- Photos and videos -------------------------------------------
-  // Put files in /public/... then list them here.
   avatar: "/images/avatar.png",
   heroPhoto: "/images/hero.jpg",
 
-  // Faces that bounce around the background. Add as many as you want.
   faces: [
     // "/images/face1.png",
     // "/images/face2.png",
   ],
- faceCount: 4,
-faceSize: 90,
-faceOpacity: 0.09,
-  faceSpeed: 0.55, // higher = faster
+  faceCount: 4,
+  faceSize: 90,
+  faceOpacity: 0.09,
+  faceSpeed: 0.55,
 
   videos: [
     // { src: "/videos/kevin.mp4", name: "Kevin" },
-    // { src: "/videos/tita.mp4",  name: "Tita Baby" },
   ],
 
   gallery: [
     // "/images/gallery/01.jpg",
-    // "/images/gallery/02.jpg",
   ],
 
-  // ---- The drinking queue ------------------------------------------
+  // ---- Shot Puno ---------------------------------------------------
+  // Leave this empty. You type the names on the page itself.
   queue: [],
 };
 
 /* ==================================================================
-   Below here: the actual site. Read it if you're curious, but you
-   don't need to edit anything.
+   Below here: the actual site.
    ================================================================== */
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-// A stand-in face so the background works before you add real photos.
+// Stand-in face so the background works before you add real photos.
 const PLACEHOLDER_FACE =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(
@@ -71,7 +70,7 @@ const PLACEHOLDER_FACE =
     </svg>`,
   );
 
-/* ---------- Fill in all the text marked with data-config ---------- */
+/* ---------- Fill in the text marked with data-config ---------- */
 $$("[data-config]").forEach((el) => {
   const value = CONFIG[el.dataset.config];
   if (value) el.textContent = value;
@@ -79,10 +78,16 @@ $$("[data-config]").forEach((el) => {
 if (CONFIG.avatar) $("#nav-avatar").src = CONFIG.avatar;
 if (CONFIG.heroPhoto) $("#hero-photo").src = CONFIG.heroPhoto;
 
+// The closing message, one paragraph per blank line.
+$("#message-body").innerHTML = CONFIG.message
+  .split("\n")
+  .map((line) => line.trim())
+  .filter(Boolean)
+  .map((paragraph) => `<p>${paragraph}</p>`)
+  .join("");
+
 /* ==================================================================
    BOUNCING FACES
-   Each face is a floating image that travels in a straight line and
-   flips direction whenever it touches an edge of the screen.
    ================================================================== */
 function startBouncingFaces() {
   const layer = $("#bounce-layer");
@@ -120,7 +125,6 @@ function startBouncingFaces() {
       f.y += f.dy;
       f.angle += f.spin;
 
-      // Bounce off the edges.
       if (f.x <= 0) { f.x = 0; f.dx *= -1; }
       if (f.y <= 0) { f.y = 0; f.dy *= -1; }
       if (f.x + f.size >= w) { f.x = w - f.size; f.dx *= -1; }
@@ -142,12 +146,10 @@ $("#enter-btn").addEventListener("click", () => {
   const transition = $("#transition");
   const site = $("#site");
 
-  // 1. Landing drops away
   landing.style.transition = "opacity .5s ease, transform .5s ease";
   landing.style.opacity = "0";
   landing.style.transform = "scale(1.06)";
 
-  // 2. Slam screen
   setTimeout(() => {
     landing.remove();
     transition.classList.remove("hidden");
@@ -155,7 +157,6 @@ $("#enter-btn").addEventListener("click", () => {
     $("#transition-text").classList.add("animate-slam");
   }, 450);
 
-  // 3. Site fades in
   setTimeout(() => {
     transition.style.transition = "opacity .6s ease";
     transition.style.opacity = "0";
@@ -181,10 +182,8 @@ function buildGreetings() {
   rail.innerHTML = items
     .map((video, i) => {
       if (!video) {
-        return `<div class="w-[260px] shrink-0 sm:w-[300px]">
-            <div class="flex aspect-square w-full items-center justify-center bg-slab text-center text-[0.6rem] uppercase tracking-[0.2em] text-black/40">
-              Video slot ${i + 1}
-            </div>
+        return `<div class="flex aspect-square w-[260px] shrink-0 items-center justify-center bg-slab text-[0.6rem] uppercase tracking-[0.2em] text-black/40 sm:w-[300px]">
+            Video slot ${i + 1}
           </div>`;
       }
       return `<button class="video-card w-[260px] shrink-0 text-left sm:w-[300px]" data-index="${i}">
@@ -233,8 +232,8 @@ buildGallery();
 $$(".rail-prev, .rail-next").forEach((btn) => {
   btn.addEventListener("click", () => {
     const rail = document.getElementById(btn.dataset.rail);
-    const step = rail.firstElementChild?.offsetWidth ?? 300;
-    rail.scrollBy({ left: btn.classList.contains("rail-next") ? step + 24 : -(step + 24), behavior: "smooth" });
+    const step = (rail.firstElementChild?.offsetWidth ?? 300) + 24;
+    rail.scrollBy({ left: btn.classList.contains("rail-next") ? step : -step, behavior: "smooth" });
   });
 });
 
@@ -293,14 +292,14 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* ==================================================================
-   SHOT PUNO — queue, scores, log, timer
-   Everything is saved in localStorage so a refresh loses nothing.
+   SHOT PUNO — starts empty, you add names on the page
    ================================================================== */
-const STORE_KEY = "shotpuno-v1";
+const STORE_KEY = "shotpuno-v2";
 
 const blankState = () => ({
+  names: [...CONFIG.queue],
   turn: 0,
-  shots: Object.fromEntries(CONFIG.queue.map((n) => [n, 0])),
+  shots: {},
   log: [],
   timer: { running: false, banked: 0, startedAt: null },
 });
@@ -308,17 +307,21 @@ const blankState = () => ({
 let state = load();
 
 function load() {
-  // Fresh start on every refresh — nothing is remembered.
-  return blankState();
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (!saved) return blankState();
+    return { ...blankState(), ...saved, timer: { ...blankState().timer, ...(saved.timer ?? {}) } };
+  } catch {
+    return blankState();
+  }
 }
 
 function save() {
-  // Persistence off. Delete this function's body's comment and
-  // put the localStorage line back if you ever want it to remember.
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
 }
 
 function currentPerson() {
-  return CONFIG.queue[state.turn % CONFIG.queue.length];
+  return state.names.length ? state.names[state.turn % state.names.length] : null;
 }
 
 function addLog(text) {
@@ -326,51 +329,125 @@ function addLog(text) {
   state.log = state.log.slice(0, 120);
 }
 
+/* ---------- Adding and removing names ---------- */
+function addName() {
+  const input = $("#name-input");
+  const name = input.value.trim();
+  if (!name) return;
+
+  const taken = state.names.some((n) => n.toLowerCase() === name.toLowerCase());
+  if (taken) {
+    input.value = "";
+    return;
+  }
+
+  state.names.push(name);
+  state.shots[name] = 0;
+  addLog(`Sumali si ${name}.`);
+  input.value = "";
+  input.focus();
+  render();
+}
+
+function removeName(name) {
+  state.names = state.names.filter((n) => n !== name);
+  delete state.shots[name];
+  if (state.turn >= state.names.length) state.turn = 0;
+  addLog(`Umalis si ${name}.`);
+  render();
+}
+
+$("#btn-add").addEventListener("click", addName);
+$("#name-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") addName();
+});
+$("#btn-clear-names").addEventListener("click", () => {
+  state.names = [];
+  state.shots = {};
+  state.turn = 0;
+  addLog("Nilinis ang listahan.");
+  render();
+});
+
+/* ---------- Draw everything ---------- */
 function render() {
-  const names = CONFIG.queue;
+  const names = state.names;
+  const empty = names.length === 0;
+  const current = currentPerson();
+
+  // Name chips
+  $("#name-chips").innerHTML = empty
+    ? '<li class="text-sm text-white/30">Wala pang pangalan. Mag-type sa taas.</li>'
+    : names
+        .map(
+          (name) => `<li class="flex items-center gap-2 rounded-full border border-white/20 py-1.5 pl-4 pr-2">
+              <span class="font-display text-sm">${name}</span>
+              <button class="chip-x flex size-5 items-center justify-center rounded-full text-white/40 hover:bg-white/15 hover:text-white"
+                      data-name="${name}" aria-label="Alisin si ${name}">✕</button>
+            </li>`,
+        )
+        .join("");
+
+  $$(".chip-x").forEach((btn) =>
+    btn.addEventListener("click", () => removeName(btn.dataset.name)),
+  );
 
   // Current turn
-  $("#current-name").textContent = currentPerson() ?? "—";
-  $("#current-sub").textContent = `${state.shots[currentPerson()] ?? 0} shots na. Wag mag-alangan.`;
+  $("#current-name").textContent = current ?? "—";
+  $("#current-sub").textContent = current
+    ? `${state.shots[current] ?? 0} shots na. Wag mag-alangan.`
+    : "Wala pang nakalista.";
+
+  // Turn buttons are dead until someone is listed
+  ["#btn-cheers", "#btn-prev", "#btn-skip"].forEach((sel) => {
+    const btn = $(sel);
+    btn.disabled = empty;
+    btn.style.opacity = empty ? "0.35" : "1";
+    btn.style.pointerEvents = empty ? "none" : "auto";
+  });
 
   // Up next
-  $("#queue-list").innerHTML = names
-    .map((_, i) => names[(state.turn + 1 + i) % names.length])
-    .slice(0, names.length - 1)
-    .map(
-      (name, i) => `<li class="flex items-center gap-4 border-b border-white/10 py-3">
-          <span class="font-display text-xs text-accent">${String(i + 1).padStart(2, "0")}</span>
-          <span class="${i === 0 ? "text-white" : "text-white/50"}">${name}</span>
-          ${i === 0 ? '<span class="ml-auto text-[0.6rem] uppercase tracking-[0.25em] text-accent">Sunod</span>' : ""}
-        </li>`,
-    )
-    .join("");
+  $("#queue-list").innerHTML = empty
+    ? '<li class="text-sm text-white/30">—</li>'
+    : names
+        .map((_, i) => names[(state.turn + 1 + i) % names.length])
+        .slice(0, names.length - 1)
+        .map(
+          (name, i) => `<li class="flex items-center gap-4 border-b border-white/10 py-3">
+              <span class="font-display text-xs text-accent">${String(i + 1).padStart(2, "0")}</span>
+              <span class="${i === 0 ? "text-white" : "text-white/50"}">${name}</span>
+              ${i === 0 ? '<span class="ml-auto text-[0.6rem] uppercase tracking-[0.25em] text-accent">Sunod</span>' : ""}
+            </li>`,
+        )
+        .join("");
 
   // Scoreboard
   const total = Object.values(state.shots).reduce((a, b) => a + b, 0);
   $("#total-shots").textContent = total;
-  $("#score-list").innerHTML = names
-    .map((name) => {
-      const count = state.shots[name] ?? 0;
-      const glasses = count > 12 ? "🥃 ×" + count : "🥃".repeat(count);
-      return `<li class="flex flex-wrap items-center gap-x-4 border-b border-white/10 py-3">
-          <span class="w-24 shrink-0 font-display">${name}</span>
-          <span class="flex-1 text-lg leading-none">${glasses || '<span class="text-xs text-white/25">Wala pa</span>'}</span>
-          <span class="text-sm tabular-nums text-white/40">${count}</span>
-        </li>`;
-    })
-    .join("");
+  $("#score-list").innerHTML = empty
+    ? '<li class="py-3 text-sm text-white/30">Wala pang kasali.</li>'
+    : names
+        .map((name) => {
+          const count = state.shots[name] ?? 0;
+          const glasses = count > 12 ? "🥃 ×" + count : "🥃".repeat(count);
+          return `<li class="flex flex-wrap items-center gap-x-4 border-b border-white/10 py-3">
+              <span class="w-24 shrink-0 font-display">${name}</span>
+              <span class="flex-1 text-lg leading-none">${glasses || '<span class="text-xs text-white/25">Wala pa</span>'}</span>
+              <span class="text-sm tabular-nums text-white/40">${count}</span>
+            </li>`;
+        })
+        .join("");
 
   // Log
   $("#log-list").innerHTML = state.log.length
     ? state.log
         .map(
           (entry) => `<li class="border-b border-white/10 py-3">
-            <p class="text-[0.6rem] uppercase tracking-[0.3em] text-accent/80">
-              ${new Date(entry.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
-            </p>
-            <p class="mt-1 text-sm text-white/70">${entry.text}</p>
-          </li>`,
+              <p class="text-[0.6rem] uppercase tracking-[0.3em] text-accent/80">
+                ${new Date(entry.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+              </p>
+              <p class="mt-1 text-sm text-white/70">${entry.text}</p>
+            </li>`,
         )
         .join("")
     : '<li class="py-3 text-sm text-white/30">Wala pang nangyayari.</li>';
@@ -381,29 +458,33 @@ function render() {
 /* ---------- Queue buttons ---------- */
 $("#btn-cheers").addEventListener("click", () => {
   const name = currentPerson();
+  if (!name) return;
   state.shots[name] = (state.shots[name] ?? 0) + 1;
-  addLog(`Tagay ni ${name}. 🥃`);
-  state.turn = (state.turn + 1) % CONFIG.queue.length;
+  addLog(`Tagay si ${name}. 🥃`);
+  state.turn = (state.turn + 1) % state.names.length;
   render();
   flashName();
 });
 
 $("#btn-skip").addEventListener("click", () => {
-  addLog(`Pinalampas ni ${currentPerson()}.`);
-  state.turn = (state.turn + 1) % CONFIG.queue.length;
+  const name = currentPerson();
+  if (!name) return;
+  addLog(`Pinalampas ni ${name}.`);
+  state.turn = (state.turn + 1) % state.names.length;
   render();
 });
 
 $("#btn-prev").addEventListener("click", () => {
-  state.turn = (state.turn - 1 + CONFIG.queue.length) % CONFIG.queue.length;
+  if (!state.names.length) return;
+  state.turn = (state.turn - 1 + state.names.length) % state.names.length;
   addLog("Balik isang turn.");
   render();
 });
 
 $("#btn-reset").addEventListener("click", () => {
   state.turn = 0;
-  state.shots = blankState().shots;
-  addLog("Reset ang queue.");
+  state.names.forEach((n) => (state.shots[n] = 0));
+  addLog("Reset ang bilang.");
   render();
 });
 
@@ -460,7 +541,7 @@ render();
 renderTimer();
 
 /* ==================================================================
-   Scroll behaviour: reveal on scroll + active nav link
+   Scroll behaviour
    ================================================================== */
 function revealOnScroll() {
   const observer = new IntersectionObserver(
