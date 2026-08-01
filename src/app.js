@@ -5,33 +5,28 @@
 const CONFIG = {
   // ---- Names and copy ----------------------------------------------
   initials: "YA",
-  eyebrow: "August 2, 2026",
   heroTitle: "Happy Birthday Ya!",
-  heroSub: "Isang gabi lang 'to. Sayangin mo, problema mo.",
   enterButton: "Pindutin mo 'to",
   transitionText: "Tanda mo na hahahahahaha",
 
   siteHeadline: "Happy birthday ya, pwede na pang portfolio 'to",
-  greetingsSub: "Mga taong hindi nakapunta, pero may sinabi pa rin.",
-  gallerySub: "Ebidensya. Wala nang bawian.",
-  shotpunoSub: "Sunod-sunod. Walang palusot.",
 
-  messageTitle: "Salamat, tol",
-  message: `Isa ka sa mga taong hindi mo kailangang tawagan para malaman mong nandiyan.
+  messageTitle: "Salamat, nigga",
+  message: `Sana makahanap ka na ng asawa.
 
-Sana ganito pa rin sa susunod na taon: mahaba ang gabi, mura ang alak, at walang umuuwi nang maaga.
+Sana next birthday mo, rekta kasal na rin.
 
-Happy birthday. Tagay.`,
+Happy birthday ulit ya.`,
   signedBy: "— Mula sa aming lahat",
-  footer: "Ginawa para sa isang gabi lang",
+
 
   // ---- Photos and videos -------------------------------------------
   avatar: "/images/avatar.png",
   heroPhoto: "/images/hero.jpg",
 
   faces: [
-    // "/images/face1.png",
-    // "/images/face2.png",
+    "/images/face1.png",
+    "/images/face2.png",
   ],
   faceCount: 4,
   faceSize: 90,
@@ -429,7 +424,7 @@ function render() {
     : names
         .map((name) => {
           const count = state.shots[name] ?? 0;
-          const glasses = count > 12 ? "🥃 ×" + count : "🥃".repeat(count);
+          const glasses = count > 12 ? "🍺 ×" + count : "🍺".repeat(count);
           return `<li class="flex flex-wrap items-center gap-x-4 border-b border-white/10 py-3">
               <span class="w-24 shrink-0 font-display">${name}</span>
               <span class="flex-1 text-lg leading-none">${glasses || '<span class="text-xs text-white/25">Wala pa</span>'}</span>
@@ -460,7 +455,7 @@ $("#btn-cheers").addEventListener("click", () => {
   const name = currentPerson();
   if (!name) return;
   state.shots[name] = (state.shots[name] ?? 0) + 1;
-  addLog(`Tagay si ${name}. 🥃`);
+  addLog(`Tagay ni ${name}.`);
   state.turn = (state.turn + 1) % state.names.length;
   render();
   flashName();
