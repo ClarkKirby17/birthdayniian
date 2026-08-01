@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <title>Happy Birthday Ya</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+
+  <body class="bg-ink text-paper">
+    <!-- Bouncing faces: background layer, sits behind everything -->
+    <div id="bounce-layer" class="pointer-events-none fixed inset-0 z-0 overflow-hidden"></div>
+
+    <!-- ============================================================
+         1. LANDING
+    ============================================================= -->
+    <div
+      id="landing"
+      class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-ink px-6 text-center"
+    >
+      <p class="mb-6 font-display text-xs tracking-[0.5em] text-white/40" data-config="eyebrow"></p>
+
+      <h1
+        id="landing-title"
+        class="display text-[clamp(2.8rem,11vw,8rem)] text-paper"
+        data-config="heroTitle"
+      ></h1>
+
+      <p class="mt-6 max-w-md text-sm text-white/50 sm:text-base" data-config="heroSub"></p>
+
+      <button id="enter-btn" class="btn-solid mt-10 text-lg" data-config="enterButton"></button>
+    </div>
+
+    <!-- ============================================================
+         2. TRANSITION
+    ============================================================= -->
+    <div
+      id="transition"
+      class="pointer-events-none fixed inset-0 z-[60] hidden items-center justify-center bg-ink px-6 text-center"
+    >
+      <h2
+        id="transition-text"
+        class="display text-[clamp(2rem,8vw,5.5rem)] text-paper"
+        data-config="transitionText"
+      ></h2>
+    </div>
+
+    <!-- ============================================================
+         3. THE SITE
+    ============================================================= -->
+    <div id="site" class="relative z-10 hidden">
+      <!-- Nav -->
+      <header class="sticky top-0 z-40 border-b-4 border-ink bg-paper text-ink">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
+          <a href="#top" class="flex shrink-0 items-center gap-2">
+            <span
+              class="flex size-9 items-center justify-center rounded-full bg-ink font-display text-[0.6rem] text-paper"
+              data-config="initials"
+            ></span>
+            <img
+              id="nav-avatar"
+              alt=""
+              class="size-10 rounded-full object-cover"
+              onerror="this.style.display='none'"
+            />
+          </a>
+
+          <nav
+            class="flex flex-wrap items-center justify-end gap-4 font-display text-sm sm:gap-9 sm:text-lg"
+          >
+            <a href="#greetings" class="nav-link whitespace-nowrap">Greetings</a>
+            <a href="#gallery" class="nav-link whitespace-nowrap">Gallery</a>
+            <a href="#shotpuno" class="nav-link whitespace-nowrap">Shot Puno</a>
+            <a href="#message" class="nav-link whitespace-nowrap">Message</a>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Hero photo -->
+      <section id="top" class="px-5 pt-6">
+        <div class="relative mx-auto aspect-[16/8] w-full max-w-6xl overflow-hidden bg-slab">
+          <img
+            id="hero-photo"
+            alt=""
+            class="h-full w-full object-cover grayscale"
+            onerror="this.style.display='none'"
+          />
+
+          <div class="wedge pointer-events-none absolute inset-0 bg-black/25"></div>
+
+          <div class="absolute left-[6%] top-[18%] w-[46%] max-w-[22rem] bg-white/85 px-5 py-4">
+            <h2
+              class="display text-[clamp(0.95rem,2vw,1.9rem)] leading-[1.3] text-ink"
+              data-config="siteHeadline"
+            ></h2>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- GREETINGS ---------- -->
+      <section id="greetings" class="scroll-mt-24 py-20">
+        <div class="mx-auto max-w-6xl px-5">
+          <h2 class="display reveal text-center text-[clamp(2rem,6vw,4rem)]">Video Greetings</h2>
+          <p
+            class="reveal mx-auto mt-3 max-w-md text-center text-sm text-white/45"
+            data-config="greetingsSub"
+          ></p>
+
+          <div class="relative mt-12">
+            <button
+              class="rail-prev absolute -left-2 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-paper font-display text-ink sm:-left-5"
+              data-rail="greetings-rail"
+              aria-label="Previous"
+            >
+              &lt;
+            </button>
+            <div
+              id="greetings-rail"
+              class="rail flex gap-6 overflow-x-auto px-1 pb-4 [&>*:first-child]:ml-auto [&>*:last-child]:mr-auto"
+            ></div>
+            <button
+              class="rail-next absolute -right-2 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-paper font-display text-ink sm:-right-5"
+              data-rail="greetings-rail"
+              aria-label="Next"
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- GALLERY ---------- -->
+      <section id="gallery" class="scroll-mt-24 py-20">
+        <div class="mx-auto max-w-6xl px-5">
+          <h2 class="display reveal text-center text-[clamp(2rem,6vw,4rem)]">Gallery</h2>
+          <p
+            class="reveal mx-auto mt-3 max-w-md text-center text-sm text-white/45"
+            data-config="gallerySub"
+          ></p>
+
+          <div class="relative mt-12">
+            <button
+              class="rail-prev absolute -left-2 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-paper font-display text-ink sm:-left-5"
+              data-rail="gallery-rail"
+              aria-label="Previous"
+            >
+              &lt;
+            </button>
+            <div
+              id="gallery-rail"
+              class="rail flex gap-6 overflow-x-auto px-1 pb-4 [&>*:first-child]:ml-auto [&>*:last-child]:mr-auto"
+            ></div>
+            <button
+              class="rail-next absolute -right-2 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-paper font-display text-ink sm:-right-5"
+              data-rail="gallery-rail"
+              aria-label="Next"
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SHOT PUNO ---------- -->
+      <section id="shotpuno" class="scroll-mt-24 border-y-4 border-white/10 py-20">
+        <div class="mx-auto max-w-6xl px-5">
+          <h2 class="display reveal text-center text-[clamp(2rem,6vw,4rem)]">Shot Puno</h2>
+          <p
+            class="reveal mx-auto mt-3 max-w-md text-center text-sm text-white/45"
+            data-config="shotpunoSub"
+          ></p>
+
+          <!-- Timer -->
+          <div
+            class="reveal mt-12 flex flex-wrap items-center justify-center gap-6 border-y-2 border-white/10 py-6"
+          >
+            <div class="text-center">
+              <p class="font-display text-[clamp(2.5rem,9vw,4.5rem)] tabular-nums" id="timer-display">
+                00:00:00
+              </p>
+              <p class="mt-1 text-[0.65rem] uppercase tracking-[0.35em] text-white/35">Inuman timer</p>
+            </div>
+            <div class="flex gap-3">
+              <button id="timer-toggle" class="btn-outline text-sm">Start</button>
+              <button id="timer-reset" class="btn-outline text-sm">Reset</button>
+            </div>
+          </div>
+
+          <!-- Add names -->
+          <div class="reveal mt-14">
+            <p class="text-[0.65rem] uppercase tracking-[0.4em] text-white/35">Sino ang kasali?</p>
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <input
+                id="name-input"
+                type="text"
+                maxlength="20"
+                placeholder="Ilagay ang pangalan..."
+                class="min-w-[12rem] flex-1 border-b-2 border-white/20 bg-transparent px-1 py-2 font-display text-lg outline-none placeholder:text-white/25 focus:border-accent"
+              />
+              <button id="btn-add" class="btn-solid text-sm">Add</button>
+              <button id="btn-clear-names" class="btn-outline text-sm">Clear lahat</button>
+            </div>
+            <ul id="name-chips" class="mt-5 flex flex-wrap gap-2"></ul>
+          </div>
+
+          <!-- Current turn + queue -->
+          <div class="mt-14 grid gap-8 lg:grid-cols-5">
+            <div class="reveal lg:col-span-3">
+              <p class="text-[0.65rem] uppercase tracking-[0.4em] text-accent">Kanya ngayon</p>
+              <h3 id="current-name" class="display mt-4 text-[clamp(3rem,13vw,7rem)]">—</h3>
+              <p class="mt-2 text-white/45" id="current-sub"></p>
+
+              <div class="mt-9 flex flex-wrap gap-3">
+                <button id="btn-cheers" class="btn-solid text-lg">Tagay! 🥃</button>
+                <button id="btn-prev" class="btn-outline text-sm">Balik</button>
+                <button id="btn-skip" class="btn-outline text-sm">Pass</button>
+                <button id="btn-reset" class="btn-outline text-sm">Reset bilang</button>
+              </div>
+            </div>
+
+            <div class="reveal lg:col-span-2">
+              <p class="text-[0.65rem] uppercase tracking-[0.4em] text-white/35">Kasunod</p>
+              <ol id="queue-list" class="mt-4"></ol>
+            </div>
+          </div>
+
+          <!-- Scoreboard + log -->
+          <div class="mt-16 grid gap-8 lg:grid-cols-5">
+            <div class="reveal lg:col-span-3">
+              <div class="flex items-baseline justify-between">
+                <p class="text-[0.65rem] uppercase tracking-[0.4em] text-white/35">Bilang ng shots</p>
+                <p class="font-display text-2xl" id="total-shots">0</p>
+              </div>
+              <ul id="score-list" class="mt-4"></ul>
+            </div>
+
+            <div class="reveal lg:col-span-2">
+              <div class="flex items-baseline justify-between">
+                <p class="text-[0.65rem] uppercase tracking-[0.4em] text-white/35">Log</p>
+                <button
+                  id="clear-log"
+                  class="text-[0.6rem] uppercase tracking-[0.3em] text-white/30 hover:text-white"
+                >
+                  Clear
+                </button>
+              </div>
+              <ul id="log-list" class="mt-4 max-h-96 overflow-y-auto pr-1"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- MESSAGE ---------- -->
+      <section id="message" class="scroll-mt-24 py-28">
+        <div class="mx-auto max-w-3xl px-5 text-center">
+          <p class="reveal text-[0.65rem] uppercase tracking-[0.4em] text-accent">Huling sabi</p>
+          <h2
+            class="display reveal mt-6 text-[clamp(2.2rem,7vw,4.5rem)]"
+            data-config="messageTitle"
+          ></h2>
+          <div
+            id="message-body"
+            class="reveal mt-10 space-y-5 text-left text-white/70 sm:text-center sm:text-lg"
+          ></div>
+          <p
+            class="reveal mt-14 text-[0.65rem] uppercase tracking-[0.4em] text-white/35"
+            data-config="signedBy"
+          ></p>
+        </div>
+      </section>
+
+      <footer
+        class="border-t border-white/10 py-10 text-center text-[0.65rem] uppercase tracking-[0.35em] text-white/25"
+      >
+        <span data-config="footer"></span>
+      </footer>
+    </div>
+
+    <!-- ============================================================
+         MODALS
+    ============================================================= -->
+    <div id="lightbox" class="fixed inset-0 z-[70] hidden items-center justify-center bg-ink/95 p-4">
+      <button id="lightbox-close" class="absolute right-5 top-5 font-display text-2xl" aria-label="Close">
+        ✕
+      </button>
+      <button id="lightbox-prev" class="absolute left-4 font-display text-3xl" aria-label="Previous">
+        &lt;
+      </button>
+      <img id="lightbox-img" alt="" class="max-h-[85vh] max-w-full object-contain" />
+      <button id="lightbox-next" class="absolute right-4 font-display text-3xl" aria-label="Next">
+        &gt;
+      </button>
+      <p id="lightbox-count" class="absolute bottom-6 text-xs tracking-[0.3em] text-white/40"></p>
+    </div>
+
+    <div id="video-modal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-ink/95 p-4">
+      <div class="w-full max-w-4xl">
+        <div class="mb-3 flex items-end justify-between">
+          <h3 id="video-title" class="display text-2xl"></h3>
+          <button id="video-close" class="font-display text-2xl" aria-label="Close">✕</button>
+        </div>
+        <video id="video-player" controls playsinline class="max-h-[75vh] w-full bg-black"></video>
+      </div>
+    </div>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

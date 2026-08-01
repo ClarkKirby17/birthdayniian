@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+   Design tokens. Change these and the whole site changes.
+ * ------------------------------------------------------------------ */
+@theme {
+  --font-display: "Anton", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-slab: #d9dce1; /* the grey placeholder blocks */
+  --color-accent: #6d5bff; /* the one non-monochrome thing on the page */
+}
+
+/* ------------------------------------------------------------------ *
+   Base
+ * ------------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  overflow-x: clip; /* NOT hidden — hidden breaks position:sticky */
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------ *
+   Reusable pieces
+ * ------------------------------------------------------------------ */
+@utility display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+}
+
+@utility btn-solid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  padding: 0.85rem 1.75rem;
+  border-radius: 999px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--color-paper);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.btn-solid:hover {
+  transform: translateY(-2px);
+}
+.btn-outline:hover {
+  border-color: var(--color-paper);
+  background: rgba(255, 255, 255, 0.08);
+}
+.btn-solid:active,
+.btn-outline:active {
+  transform: scale(0.97);
+}
+
+/* Nav underline: padding INSIDE the link so nothing overflows the header */
+.nav-link {
+  position: relative;
+  padding-bottom: 6px;
+}
+.nav-link.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--color-ink);
+}
+
+/* Carousels: hide the scrollbar, keep the snapping */
+.rail {
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail > * {
+  scroll-snap-align: center;
+}
+
+/* Wedge in the bottom-right corner of the hero photo */
+.wedge {
+  clip-path: polygon(100% 28%, 100% 100%, 52% 100%);
+}
+
+/* Entrance animations, driven by JS adding .reveal-in */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slam {
+  0% {
+    opacity: 0;
+    transform: scale(1.35);
+    filter: blur(12px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.98);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-slam {
+  animation: slam 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
