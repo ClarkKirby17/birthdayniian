@@ -40,6 +40,7 @@ Happy birthday ulit ya.`,
     { src: "/videos/vid4", name: "MJ" },
     { src: "/videos/vid5", name: "Eson" },
     { src: "/videos/vid6", name: "Karl" },
+    { src: "/videos/vid7", name: "Jed" },
   ],
 
   gallery: [
