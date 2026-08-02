@@ -34,13 +34,13 @@ Happy birthday ulit ya.`,
   faceSpeed: 0.55,
 
   videos: [
-    { src: "/videos/vid1", name: "Mayo" },
-    { src: "/videos/vid2", name: "Ruel" },
-    { src: "/videos/vid3", name: "Jor" },
-    { src: "/videos/vid4", name: "MJ" },
-    { src: "/videos/vid5", name: "Eson" },
-    { src: "/videos/vid6", name: "Karl" },
-    { src: "/videos/vid7", name: "Jed" },
+    { src: "/videos/vid1.mp4", name: "Mayo" },
+    { src: "/videos/vid2.mp4", name: "Ruel" },
+    { src: "/videos/vid3.mp4", name: "Jor" },
+    { src: "/videos/vid4.mp4", name: "MJ" },
+    { src: "/videos/vid5.mp4", name: "Eson" },
+    { src: "/videos/vid6.mp4", name: "Karl" },
+    { src: "/videos/vid7.mp4", name: "Jed" },
   ],
 
   gallery: [
