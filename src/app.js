@@ -44,7 +44,20 @@ Happy birthday ulit ya.`,
   ],
 
   gallery: [
-    // "/images/gallery/01.jpg",
+    "/images/gallery/1.jpg",
+    "/images/gallery/2.png",
+    "/images/gallery/3.jpg",
+    "/images/gallery/4.png",
+    "/images/gallery/5.jpg",
+    "/images/gallery/6.png",
+    "/images/gallery/7.jpg",
+    "/images/gallery/8.jpg",
+    "/images/gallery/9.jpg",
+    "/images/gallery/10.jpg",
+    "/images/gallery/11.jpg",
+    "/images/gallery/12.jpg",
+    "/images/gallery/13.jpg",
+    "/images/gallery/14.jpg",
   ],
 
   // ---- Shot Puno ---------------------------------------------------
